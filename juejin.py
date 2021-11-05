@@ -48,7 +48,7 @@ def juejin():
                 driver.get(juejin_url)
                 pagesource = driver.page_source
 
-                time.sleep(2)
+                time.sleep(5)
                 if "的头像" in pagesource:
                     flag = False
                     driver.get('https://juejin.cn/user/center/signin')
