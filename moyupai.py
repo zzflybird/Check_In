@@ -5,29 +5,27 @@ password = sys.argv[2] # 登录密码
 img_path = os.getcwd() + "/1.png"
 
 @retry(stop_max_attempt_number=5)
-def moyupai():
+def moyupai(driver):
     try:
-        driver = get_web_driver()
+        # driver = get_web_driver()
+        driver.maximize_window()
+        time.sleep(1)
         driver.get("https://pwl.icu/login")
+        time.sleep(1)
         driver.find_element_by_xpath("//*[@id='nameOrEmail']").send_keys(username)
+        time.sleep(1)
         driver.find_element_by_xpath("//*[@id='loginPassword']").send_keys(password)
+        time.sleep(1)
         driver.find_element_by_xpath("//*[@class='green']").click() # 为了显示验证码，先点击一次登录
-
-        # if driver.find_elements_by_xpath("//*[@id='captchaLogin']"): # 如果需要输入验证码
-        #     driver.find_element_by_xpath("//*[@id='nameOrEmail']").send_keys(username) # 从这开始才是真正的登录步骤
-        #     driver.find_element_by_xpath("//*[@id='loginPassword']").send_keys(password)
-        #     valid = Ocr_Captcha(driver, "//*[@class='captcha-img fn-pointer']", img_path) # 验证码识别
-        #     driver.find_element_by_xpath("//*[@id='captchaLogin']").send_keys(valid)
-        #     driver.find_element_by_xpath("//*[@class='green']").click()
-        
-        driver.find_element_by_xpath("//*[@id='yesterday']").click()
+        # 登陆后
+        time.sleep(5)
         driver.find_element_by_xpath("//*[@id='checkIn']").click()
-
-        valid = Ocr_Captcha(driver, "//*[@id='registerCaptchaImg']", img_path) # 验证码识别
-        if valid != '':
-            driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys(valid)
-            driver.find_element_by_xpath("//*[@onclick='submitCheckIn()']").click()
-            print('moyupai签到成功')
+        print("每日签到")
+        time.sleep(5)
+        driver.find_element_by_xpath("//*[@id='yesterday']").click()
+        print("领取昨日活跃奖励")
+        time.sleep(1)
+        print('moyupai签到成功')
     except:
         raise
     finally:
