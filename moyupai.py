@@ -5,9 +5,9 @@ password = sys.argv[2] # 登录密码
 img_path = os.getcwd() + "/1.png"
 
 @retry(stop_max_attempt_number=5)
-def moyupai(driver):
+def moyupai():
     try:
-        # driver = get_web_driver()
+        driver = get_web_driver()
         driver.maximize_window()
         time.sleep(1)
         driver.get("https://pwl.icu/login")
