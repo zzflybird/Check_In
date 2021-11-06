@@ -13,6 +13,7 @@ def save_img(src):
 def gamekegs():
     try:
         driver = get_web_driver()
+        driver.maximize_window()
         driver.get("https://gamekegs.com/login")
         driver.find_element_by_xpath("//*[@id='username']").send_keys(username)
         driver.find_element_by_xpath("//*[@id='password']").send_keys(password)
