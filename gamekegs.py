@@ -1,4 +1,5 @@
 from util import *
+import time
 
 username = sys.argv[1] # 登录账号
 password = sys.argv[2] # 登录密码
@@ -27,7 +28,7 @@ def gamekegs():
 
         if driver.find_elements_by_xpath("//*[@class='usercheck checkin']") != []:
             driver.find_element_by_xpath("//*[@class='usercheck checkin']").click()
-            print('gamekegs签到成功')
+            print('gamekegs签到成功, 时间为'+time.strftime('%Y-%m-%d %H:%M:%S'))
     except:
         raise
     finally:
