@@ -26,46 +26,31 @@ def Sliding_Captcha(driver):
     ActionChains(driver).release(on_element=verify_div).perform()
     time.sleep(10)
 
-
 @retry(stop_max_attempt_number=5)
 def juejin():
-        flag = True
-        while flag:
-            try:
-                driver = get_web_driver()
-                driver.maximize_window()
-                driver.get("https://juejin.cn/")
-                driver.find_element_by_xpath("//*[@class='login-button']").click()  # 点击"登录"按钮
-                driver.find_element_by_xpath("//*[@class='clickable']").click()  # 点击"其他登录方式"
-                driver.find_element_by_xpath("//*[@name='loginPhoneOrEmail']").send_keys(username)
-                driver.find_element_by_xpath("//*[@name='loginPassword']").send_keys(password)
-                driver.find_element_by_xpath("//*[@class='btn']").click()  # 点击"登录"按钮
-                time.sleep(5)
+    try:
+        driver = get_web_driver()
+        driver.maximize_window() # 最大化窗口
+        driver.get("https://juejin.cn/")
+        driver.find_element_by_xpath("//*[@class='login-button']").click() # 点击"登录"按钮
+        driver.find_element_by_xpath("//*[@class='clickable']").click() # 点击"其他登录方式"
+        driver.find_element_by_xpath("//*[@name='loginPhoneOrEmail']").send_keys(username)
+        driver.find_element_by_xpath("//*[@name='loginPassword']").send_keys(password)
+        driver.find_element_by_xpath("//*[@class='btn']").click() # 点击"登录"按钮
+        
+        Sliding_Captcha(driver) # 验证码处理
 
-                # 验证码处理的正确率不高
-                Sliding_Captcha(driver)  # 验证码处理 如果验证失败怎么办
-
-                # 登陆后进入每日签到页面
-                juejin_url = 'https://juejin.cn'
-                driver.get(juejin_url)
-                pagesource = driver.page_source
-
-                time.sleep(5)
-                if "的头像" in pagesource:
-                    flag = False
-                    driver.get('https://juejin.cn/user/center/signin')
-                    if driver.find_elements_by_xpath("//*[@class='signedin btn']") != []:
-                        # driver.find_element_by_xpath("//*[@class='signin btn']").click()
-                        driver.find_element_by_xpath("//*[@class='signedin btn']").click()
-                        time.sleep(10)
-                        print("JueJin签到成功")
-                else:
-                    print("验证码未正确识别，签到失败！")
-            except:
-                raise
-            finally:
-                driver.quit()
-
+        driver.get("https://juejin.cn/user/center/signin")
+        time.sleep(2)
+        if driver.find_elements_by_xpath("//*[@class='signin btn']") != []:
+            print(driver.title)
+            driver.find_element_by_xpath("//*[@class='signin btn']").click()
+            time.sleep(2)
+            print("JueJin签到成功")
+    except:
+        raise
+    finally:
+        driver.quit()
 
 if __name__ == '__main__':
     juejin()
